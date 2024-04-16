@@ -1,0 +1,31 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Include other CSS files specific to this template if necessary -->
+</head>
+<body class="register-body" style="background-image: url('{% static 'logo.png' %}');">
+    <div class="register-container" style = "">
+        <h2>Register</h2>
+        <form method="post">
+            
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+            <p>Už máte účet? <a href="{% url 'login' %}">Prihláste sa</a>.</p>
+        </form>
+    </div>
+</body>
+
+<footer>
+    <p>Aplikáciu pôvodne vytvoril a navrhol Samuel Ješík v 2024 ako bakalársku prácu na škole Univerzita Komenského v
+        Bratislave, Fakulta matematiky, fyziky a informatiky.</p>
+</footer>
+
+</html>

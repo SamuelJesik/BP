@@ -1,0 +1,75 @@
+<!-- myapp/templates/base.html -->
+
+{% load static %}
+{% load i18n %}  <!-- Add this line if you plan to use the translation template tags -->
+
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BP{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+
+    {% if request.session.show_welcome %}
+    <div id="welcome-box" class="welcome-box">
+        <p>Boli ste úspešné prihlásený(a) do systému.   </p>
+    </div>
+    {% endif %}
+
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- User information and logout placed on top of each other -->
+            <div class="nav-left">
+                
+                {% if request.user.is_authenticated %}
+                    <div class="user-info">
+                        <span>{% trans "Vitajte" %}, {{ request.user.get_full_name|default:request.user.username }}</span>
+                        <a href="{% url 'logout' %}" class="logout-link">{% trans "Odhlásiť sa" %}</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-link">{% trans "Log in" %}</a>
+                    <a href="{% url 'register' %}" class="register-link">{% trans "Register" %}</a>
+                {% endif %}
+            </div>
+            
+            <!-- Navigation items next to the user info -->
+            <ul class="nav-list">
+                <li class="nav-item"><a href="{% url 'index' %}">Domov</a></li>
+                <li class="nav-item"><a href="{% url 'add_task' %}">Pridať Úlohu</a></li>
+                <li class="nav-item"><a href="{% url 'tasks' %}">Zoznam Úloh</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<div class="content">
+    {% block content %}
+        <!-- Content block to be overridden by other templates -->
+    {% endblock content %}
+</div>
+
+<footer>
+    <p>Aplikáciu pôvodne vytvoril a navrhol Samuel Ješík v 2024 ako bakalársku prácu na škole Univerzita Komenského v
+        Bratislave, Fakulta matematiky, fyziky a informatiky.</p>
+</footer>
+
+{% block extra_js %}{% endblock extra_js %}
+
+</body>
+</html>

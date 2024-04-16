@@ -1,0 +1,17 @@
+<!-- myapp/templates/index.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Úvodná Stránka{% endblock %}
+
+{% block content %}
+    <div class="homepage">
+        <!-- Add the logo image at the top of the homepage -->
+
+        <h1>Vitajte v aplikácii Refaktorer</h1>
+        <p>Webové rozhranie vyvinuté pre výučbu refaktorizácie kódu.</p>
+    </div>
+    <img src="{% static 'logo.png' %}" alt="Refaktorer Logo" class="homepage-logo">
+
+{% endblock %}

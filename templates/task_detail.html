@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load static %} <!-- Ensure this line is at the beginning of your template -->
+
+<!-- myapp/templates/task_detail.html -->
+
+
+{% block extra_head %}
+    <!-- Adding Ace Editor via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+    // This will create a global variable that your external script can access
+    var readOnlyCode = `{{ task.input_code|escapejs }}`;
+    var expectedOutput = `{{ task.expected_output|escapejs }}`;
+</script>
+
+<!-- V tvojej Django šablóne -->
+<script type="text/javascript">
+    // Ulož CSRF token do JavaScript premenného z Django šablóny
+    var csrfToken = "{{ csrf_token }}";
+</script>   
+
+    <!-- runcode -->
+<div id="task-data" data-task-id="{{ task.id }}" style="display: none;"></div>
+
+
+    <!-- Correctly link to your external scripts.js file -->
+    <script src="{% static 'js/script.js' %}"></script>
+    {% endblock extra_head %}
+
+{% block content %}
+<div class="content">
+    <h2>{{ task.title }}</h2>
+<!-- Task Description with Header -->
+<div class="task-description-container">
+    <h2 class="task-description-header">Zadanie</h2>
+    <div class="task-description">
+        <p>{{ task.description }}</p>
+    </div>
+</div>
+
+
+
+<div class="editor-container">
+    <!--  Read-Only Editor -->
+    <div class="editor-wrapper">
+        <h2 class="editor-header">Zadanie kódu:</h2>
+        <div id="readonly-editor" class="ace-editor"></div>
+    </div>
+    
+    <!--  Editable Editor -->
+    <div class="editor-wrapper">
+        <h2 class="editor-header">Vaše riešenie:</h2>
+        <div id="editor" class="ace-editor"></div>
+        <button id="run-code" class="run-button">Run</button>
+    </div>
+
+    <!-- New Unit Tests Editor -->
+    <div class="editor-wrapper">
+        <h2 class="editor-header">Unit Testy:</h2>
+        <div id="unit-tests-editor" class="ace-editor"></div>
+        <button id="show-results">Zobraziť Výsledky Testov</button>
+    </div>
+</div>
+
+<div id="testResultsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">×</span>
+    <h2>Výsledky Testov</h2>
+    <pre id="test-results-output"></pre>
+  </div>
+</div>
+
+    
+    
+    
+    <!-- Hidden file input for selecting Python files only -->
+<div class="form-container">
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file"accept=".py" style="display:none;">
+        {% csrf_token %}
+        <span id="file-chosen">Please choose a file.</span> <!-- Add this line -->
+        <button type="button" id="uploadBtn">Choose File</button> <!-- Assign the ID here -->
+        <button type="submit" id="submitBtn">Upload</button>
+    </form>
+</div>
+
+    {% for uploaded_file in uploaded_files %}
+    <div class="uploaded-file-item">
+        <p>{{ forloop.counter }}. File:
+            <a href="{{ uploaded_file.file.url }}" class="uploaded-file-link" download="{{ uploaded_file.file.name }}">
+                {{ uploaded_file.file.name|cut:"uploads/" }}
+            </a>
+        </p>
+        <p class="uploaded-file-info">Uploaded at: {{ uploaded_file.uploaded_at }}</p>
+    </div>
+{% endfor %}
+
+
+
+    
+    
+    <!-- Add more scripts and content as needed -->
+</div>
+{% endblock %}

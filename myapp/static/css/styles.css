@@ -1,0 +1,428 @@
+/* myapp/static/css/styles.css */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h2 {
+    color: navy;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}   
+
+form {
+    margin-top: 20px;
+}
+
+.form-container {
+    margin-bottom: 20px; /* This adds space below your form */
+}
+
+
+button {
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: darkblue;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+footer {
+    background-color: #f2f2f2;
+    text-align: center;
+    font-size: 0.8em;
+    padding: 20px;
+    margin-top: auto;
+}
+
+
+.login-container, .register-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px; /* Adjust as needed */
+}
+
+.login-body {
+    background-size: cover; /* Cover the entire page */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+  }
+  
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+pre {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e1e8;
+    padding: 10px;
+}
+
+/* Pushes body content down so it's not covered by the fixed navbar. */
+/* The value here should at least match the navbar's height. */
+body {
+    padding-top: 70px; /* Adjust this value based on your navbar's actual height */
+}
+
+.navbar {
+    background: linear-gradient(to right,#0e0808 , #3d3d3d); /* Updated to a gray gradient */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.nav-left, .nav-list {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.nav-list {
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+}
+
+.user-info {
+    margin-bottom: 10px; /* Space between user info and logout link */
+}
+
+.nav-item {
+    margin: 0 10px;
+}
+
+.nav-item a, .user-info span, .logout-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+.nav-item a:hover, .logout-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* You may need to adjust the padding-top to accommodate the new height of the navbar */
+body {
+    padding-top: 100px; /* Adjust based on new navbar height */
+}
+
+
+
+.user-info {
+    color: whitesmoke;
+    margin-right: 20px;
+}
+
+.logout-link {
+    color: #fff;
+    background-color: #f44336;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+}
+
+.logout-link:hover {
+    background-color: #c13525;
+    
+}
+
+.login-link {
+    color: #fff;
+    background-color: #f44336;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.login-link:hover {
+    background-color: #c13525;
+}
+
+#messageContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    /* Add further styling to match your blue button */
+}
+#file-chosen {
+    margin-left: 10px;
+    /* Add styling as needed */
+}
+#file-upload-container {
+    margin-bottom: 10px; /* Spacing between file name and button */
+}
+
+#file-chosen {
+    display: block; /* Makes 'No file chosen' text appear on its own line */
+    margin-top: 5px;
+}
+
+.btn {
+    display: block; /* Makes buttons appear on their own line */    
+    margin-top: 10px; /* Spacing between buttons */
+    /* Add more styling as desired */
+}
+
+/* Hide the default file input field visually */
+[for="fileInput"] {
+    visibility: hidden;
+    position: absolute;
+}
+
+/* New CSS rules for uploaded file list */
+.uploaded-file-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.uploaded-file-item {
+    background-color: #f7f7f7;
+    border: 1px solid #e1e1e8;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.uploaded-file-link {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.uploaded-file-link:hover {
+    text-decoration: underline;
+}
+
+.uploaded-file-info {
+    font-size: 0.9em;
+    color: #666;
+}
+
+
+/* Style the form labels for consistency */
+form label {
+    text-align: right;
+    margin-right: 10px;
+}
+
+/* Style the form inputs for better appearance */
+form input, form textarea, form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/*Description*/
+
+.task-description-container {
+    margin-bottom: 20px; /* Spacing below the description container */
+}
+
+.task-description-header {
+    text-align: center; /* Center the header text */
+    margin-bottom: 10px; /* Spacing between header and description box */
+    color: navy; /* Blue color for the header text */
+    /* You can add more styles if needed */
+}
+
+.task-description {
+    background-color: #f8f9fa; /* Light grey background */
+    border-left: 5px solid navy; /* Blue accent on the left border */
+    padding: 10px 20px; /* Padding inside the box */
+    margin: 0; /* Reset margin */
+    border-radius: 5px; /* Rounded corners for the box */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+    color: #333; /* Dark grey text color for contrast */
+    font-size: 1rem; /* Standard font size */
+}
+
+
+
+/*editors*/
+
+.editor-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.editor-wrapper {
+    flex: 1;
+}
+
+.ace-editor {
+    height: 400px; /* Adjust as needed */
+    margin-bottom: 20px;
+}
+
+.editor-header {
+    text-align: center;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+
+/*homepage*/
+
+.homepage {
+    text-align: center; /* Centers the content */
+    padding: 40px; /* Adds padding around the content */
+    background-color: #fff; /* White background for the content area */
+    margin: 30px; /* Adds some margin around the content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    border-radius: 8px; /* Rounded corners for the content box */
+}
+
+.homepage h1 {
+    color: #333; /* Dark grey color for the heading */
+    margin-bottom: 20px; /* Adds space below the heading */
+    font-size: 2.5em; /* Larger font size for the heading */
+}
+
+.homepage p {
+    color: #666; /* Lighter grey color for the paragraph */
+    font-size: 1.2em; /* Slightly larger font size for the paragraph */
+}
+.homepage-logo {
+    display: block; /* To ensure it doesn't inline with other elements */
+    max-width: 200px; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin: 0 auto 20px; /* Center the logo and add some space below */
+}
+
+.run-button{
+
+    background-color: darkgreen;
+}
+
+.run-button:hover{
+
+    background-color: lime;
+}
+
+/* testy */
+
+.modal {
+    display: none; /* Skryté predvoleným nastavením */
+    position: fixed; /* Zostaň na mieste */
+    z-index: 1000; /* Sit na vrchu, použi vyššiu hodnotu ako majú ostatné prvky */
+    left: 0;
+    top: 0;
+    width: 100%; /* Plná šírka */
+    height: 100%; /* Plná výška */
+    overflow: auto; /* Umožni poscrollenie, ak je potrebné */
+    background-color: rgb(0,0,0); /* Farebný pozadí */
+    background-color: rgba(0,0,0,0.4); /* Čierny s opacitou */
+    padding-top: 50px; /* Pridá priestor na vrchu okna */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Centrovane */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Môžeš upraviť alebo nechať auto */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+  }
+  
+  /* Add Animation */
+  @keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+  }
+  
+  .close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Definuje tri stĺpce s rovnakou šírkou */
+    grid-gap: 20px; /* Medzera medzi položkami */
+    padding: 0;
+    list-style: none;
+    margin: 20px 0; /* Prispôsobte podľa potreby */
+}
+
+.tasks-grid li {
+    background-color: #f8f9fa; /* Svetlošedé pozadie */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Jemný tieň */
+    padding: 10px;
+    border-radius: 5px; /* Zaoblené rohy */
+}
+
+.tasks-grid a {
+    color: #007bff; /* Modrá farba odkazov */
+    text-decoration: none;
+    display: block; /* Aby odkaz zaujímal celú plochu <li> */
+}
+
+.tasks-grid a:hover {
+    text-decoration: underline; /* Podčiarknutie pri prejdení myšou */
+}
+
+.content h2 {
+    text-align: center; /* Vycentrovanie nadpisu */
+}
