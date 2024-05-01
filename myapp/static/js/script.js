@@ -1,4 +1,5 @@
 console.log("Script loaded");
+console.log("Direct log without waiting for DOMContentLoaded");
 
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOM fully loaded and parsed");
@@ -39,25 +40,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var fileInputElement = document.getElementById('fileInput');
     var fileChosenElement = document.getElementById('file-chosen');
     
+    var buttons = document.querySelectorAll('.toggle-details-btn');
+    // Pre každé tlačidlo pridajte event listener
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Tento selektor nájde najbližší element '.code-run-details' voči tlačidlu
+            var details = button.nextElementSibling;
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        });
+    });
 
-
-    // Získanie modálneho elementu
     var modal = document.getElementById("testResultsModal");
-    // Získanie elementu <span>, ktorý zatvára modálne okno
     var span = document.getElementsByClassName("close-button")[0];
-    // Získanie elementu pre výstup testov
     var testOutput = document.getElementById("test-results-output");
-    // Globálna premenná pre uchovanie výsledkov testov
+    var expandableSection = document.getElementById("expandable-test-results");
+    var expandedTestOutput = document.getElementById("expanded-test-results-output");
     var lastTestResults = "";
-
+    
     var showResultsButton = document.getElementById('show-results');
-    showResultsButton.addEventListener('click', function() {
+showResultsButton.addEventListener('click', function() {
     if (lastTestResults) {
-        // Ak existujú uložené výsledky testov, zobrazíme ich v modálnom okne
-        testOutput.innerHTML = lastTestResults;
-        modal.style.display = "block";
+        // Prepneme zobrazenie výsledkov testov v rozbaliteľnej sekcii
+        expandedTestOutput.innerHTML = lastTestResults;
+        if (expandableSection.style.display === "block") {
+            expandableSection.style.display = "none";
+        } else {
+            expandableSection.style.display = "block";
+        }
     } else {
         console.log("Žiadne výsledky testov na zobrazenie.");
+    }
+});
+
+    // Funkcionalita pre zatvorenie rozbaliteľnej sekcie, pridajte napríklad krížik alebo tlačidlo pre zatvorenie
+document.addEventListener('click', function(event) {
+    if (event.target === expandableSection || event.target.closest('.close-results')) {
+        expandableSection.style.display = "none";
     }
 });
 
@@ -187,6 +205,10 @@ runButton.addEventListener('click', function() {
             // The file is set, let the form submit normally
         }
     });
+    console.log("Attaching click event listeners to show-tasks-btn elements.");
+
+    
+    
 });
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import RefactoringTask, UploadedFile
+from .models import RefactoringTask, UploadedFile, TaskRating
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -29,3 +29,8 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+class TaskRatingForm(forms.ModelForm):
+    class Meta:
+        model = TaskRating
+        fields = ['rating', 'feedback']

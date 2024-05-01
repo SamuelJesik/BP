@@ -40,6 +40,26 @@
     </div>
 </div>
 
+<!-- Display ratings to the student -->
+
+<!-- Toggle Button for Ratings -->
+<button id="toggle-ratings" class="btn btn-info">Zobraziť hodnotenie</button>
+
+<!-- Ratings Section -->
+<div id="ratings-container" style="display: none;">
+    <h3>Vaše hodnotenie:</h3>
+    {% for rating in ratings %}
+        <div class="rating-item">
+            <p>Hodnotenie: {{ rating.rating }}</p>
+            <p>Feedback: {{ rating.feedback }}</p>
+            <p>Ohodnotené dňa: {{ rating.created_at|date:"d.m.Y H:i" }}</p>
+        </div>
+    {% empty %}
+        <p>Zatiaľ ste nedostali žiadne hodnotenie.</p>
+    {% endfor %}
+</div>
+
+
 
 
 <div class="editor-container">
@@ -54,6 +74,7 @@
         <h2 class="editor-header">Vaše riešenie:</h2>
         <div id="editor" class="ace-editor"></div>
         <button id="run-code" class="run-button">Run</button>
+    
     </div>
 
     <!-- New Unit Tests Editor -->
@@ -63,6 +84,10 @@
         <button id="show-results">Zobraziť Výsledky Testov</button>
     </div>
 </div>
+
+<div id="expandable-test-results" class="expandable-results" style="display: none;">
+    <pre id="expanded-test-results-output"></pre>
+    </div>
 
 <div id="testResultsModal" class="modal">
   <div class="modal-content">
@@ -97,10 +122,57 @@
     </div>
 {% endfor %}
 
+<!-- Výsledky zbehnutia kódu... -->
+{% for coderun in coderuns %}
+<div class="code-run-item">
+    <button class="toggle-details-btn">Detaily zbehnutia #{{ forloop.counter }}</button>
+    <div class="code-run-details" style="display: none;">
+        <pre>{{ coderun.code }}</pre>
+        <p>Output:</p>
+        <pre>{{ coderun.output }}</pre>
+        <p>Tests Output:</p>
+        <pre>{{ coderun.tests_output }}</pre>
+        <p class="code-run-info">Created At: {{ coderun.created_at }}</p>
+    </div>
+</div>
+{% endfor %}
 
-
-    
-    
     <!-- Add more scripts and content as needed -->
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      {% for message in messages %}
+      Swal.fire({
+        title: "{{ message.tags|title }}",
+        text: "{{ message }}",
+        icon: "{{ message.tags }}",
+        confirmButtonText: 'OK'
+      });
+      {% endfor %}
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var container = document.getElementById('ratings-container');
+        container.style.maxHeight = '0px';
+    
+        document.getElementById('toggle-ratings').addEventListener('click', function() {
+            console.log('Kliknuté na tlačidlo "Zobraziť hodnotenia"');
+            console.log('Aktuálna maximálna výška:', container.style.maxHeight);
+    
+            if (container.style.maxHeight === '0px') {
+                console.log('Rozbalovanie hodnotení');
+                container.style.maxHeight = '5000px';
+                container.style.padding = '20px';
+                container.style.display = 'block'; 
+            } else {
+                console.log('Zbalovanie hodnotení');
+                container.style.maxHeight = '0px';
+                container.style.padding = '0';
+                container.style.display = 'none';
+
+            }
+        });
+    });
+  </script>
 {% endblock %}

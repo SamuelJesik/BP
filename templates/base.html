@@ -9,7 +9,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BP{% endblock title %}</title>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Fira Code' rel='stylesheet'>
+
     {% block extra_head %}{% endblock extra_head %}
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh;">
@@ -50,8 +53,13 @@
             <!-- Navigation items next to the user info -->
             <ul class="nav-list">
                 <li class="nav-item"><a href="{% url 'index' %}">Domov</a></li>
+                {% if request.user.is_superuser %}
                 <li class="nav-item"><a href="{% url 'add_task' %}">Pridať Úlohu</a></li>
+                {% endif %}
                 <li class="nav-item"><a href="{% url 'tasks' %}">Zoznam Úloh</a></li>
+                {% if request.user.is_superuser %}
+                <li class="nav-item"><a href="{% url 'rating_view' %}">Hodnotenie</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>

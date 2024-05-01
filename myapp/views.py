@@ -2,8 +2,8 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .models import  RefactoringTask, UploadedFile
-from .forms import RefactoringTaskForm
+from .models import  RefactoringTask, UploadedFile, CodeRun,TaskRating
+from .forms import RefactoringTaskForm,TaskRatingForm
 from .forms import UploadCodeForm  # Ensure you have this imports
 from django.contrib.auth.decorators import login_required  # If you want to require users to be logged in
 from django.contrib.auth import login
@@ -13,6 +13,7 @@ from django.contrib import messages
 from subprocess import Popen, PIPE
 import subprocess
 import os
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import logging
@@ -23,18 +24,17 @@ import sys
 
 
 
-
-
-
-
  ##############################################################################################
 
 @login_required
 def add_task(request):
+    if not request.user.is_superuser:
+        return render(request, 'unauthorized.html', status=403)
     if request.method == 'POST':
         form = RefactoringTaskForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Úloha bola úspešne pridaná.')
             return redirect('tasks')
     else:
         form = RefactoringTaskForm()
@@ -46,11 +46,53 @@ def list_tasks(request):
     return render(request, 'tasks.html', {'tasks': tasks})
 
 @login_required
+def task_detail_view(request, user_id, task_id):
+    user_id = int(user_id)
+    if not request.user.is_superuser and request.user.id != user_id:
+        return render(request, 'unauthorized.html', status=403)
+    
+    # Fetch the task to ensure it exists
+    task = get_object_or_404(RefactoringTask, id=task_id)
+    user = get_object_or_404(User, id=user_id)
+
+
+    # If you have a model for uploaded files with a 'user' field pointing to the User model
+    uploaded_files = UploadedFile.objects.filter(user_id=user_id, RefactoringTask_id=task_id).order_by('uploaded_at') 
+
+    # Assuming CodeRun also has a 'user' field pointing to the User model
+    coderuns = CodeRun.objects.filter(user_id=user_id, task=task_id).order_by('created_at')
+    ratings = TaskRating.objects.filter(user=user, task=task)
+
+    if request.method == 'POST':
+        form = TaskRatingForm(request.POST)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = user
+            rating.task = task
+            rating.save()
+            messages.success(request, 'Hodnotenie bolo úspešne pridané.')
+            return redirect(request.path_info)  # Reloads the current page with updated context
+    else:
+        form = TaskRatingForm()
+
+    context = {
+        'user': user,
+        'task': task,
+        'uploaded_files': uploaded_files,
+        'coderuns': coderuns,
+        'ratings': ratings,
+        'form': form
+    }
+    
+    return render(request, 'task_detail_admin.html', context)
+@login_required
 def task_detail(request, task_id):
     task = get_object_or_404(RefactoringTask, id=task_id)
     
     # Only get files uploaded by the current user for this task, ordered by the upload date
     uploaded_files = task.uploaded_files.filter(user=request.user).order_by('uploaded_at') 
+    coderuns = CodeRun.objects.filter(task_id=task_id, user_id=request.user).order_by('created_at')
+    ratings = TaskRating.objects.filter(task=task, user=request.user).order_by('created_at')
 
     if request.method == 'POST':
         form = UploadCodeForm(request.POST, request.FILES)
@@ -61,13 +103,23 @@ def task_detail(request, task_id):
                 user=request.user
             )
             uploaded_file.save()
+            messages.success(request, 'Súbor bol úspešne nahraný.')
+
             # Redirect to the same page to show the updated file list
             return redirect('task_detail', task_id=task.id)
     else:
         form = UploadCodeForm()
 
+    context = {
+    'task': task,
+    'form': form,
+    'uploaded_files': uploaded_files,
+    'coderuns': coderuns,
+    'ratings': ratings,  # Add ratings to the context
+}
+
     # Pass the uploaded_files filtered by the current user to the template
-    return render(request, 'task_detail.html', {'task': task, 'form': form, 'uploaded_files': uploaded_files})
+    return render(request, 'task_detail.html', context)
 
 @login_required
 def index(request):
@@ -80,15 +132,32 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log in the user immediately after registering
+            
             return redirect('index')  # Redirect to a home page or other appropriate page
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
-
+@login_required
+def rating_view(request):
+    if not request.user.is_superuser:
+        return render(request, 'unauthorized.html', status=403)
+    students = User.objects.filter(is_superuser=False)  # or whatever your criteria for students are
+    return render(request, 'rating.html', {'students': students})
 
 # Set up Django's logging system to capture information about failures
 logger = logging.getLogger(__name__)
+
+
+@login_required
+def get_tasks_for_student(request, student_id):
+    if not request.user.is_superuser:
+        return render(request, 'unauthorized.html', status=403)
+
+    # Fetch all tasks (adjust this if you have a specific way to associate tasks with students)
+    tasks = RefactoringTask.objects.all().values('id', 'title')
+    tasks_data = [{'id': task['id'], 'title': task['title']} for task in tasks]
+    return JsonResponse({'tasks': tasks_data})
 
 @login_required
 @require_http_methods(["POST"])  # Ensure this endpoint only allows POST requests
@@ -166,6 +235,18 @@ def run_code(request, task_id):
             text=True,
             timeout=60  # Dlhší časový limit pre testy
         )
+
+        # Save to database after successful execution
+        code_run_instance = CodeRun(
+            user=request.user,
+            task=RefactoringTask.objects.get(id=task_id),
+            code=code,
+            output=result.stdout if result.stdout else result.stderr,
+            tests_output=test_result.stdout if test_result.stdout else test_result.stderr
+        )
+        code_run_instance.save()
+
+        
 
         # Zaznamenáme výsledky testov
         logger.info(f"Tests executed with stdout: {test_result.stdout}")
