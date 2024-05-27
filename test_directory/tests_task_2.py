@@ -1,20 +1,27 @@
 import unittest
-from temp_code_2 import calculate_squares  # Importujeme vašu funkciu pre testovanie
+from temp_code_2 import process_user_data
 
+class TestProcessUserData(unittest.TestCase):
 
+    def test_complete_data(self):
+        # Testujeme, že funkcia správne spracuje kompletné dáta
+        self.assertEqual(process_user_data({"name": "Alice", "age": 25, "active": True}),
+                         {"name": "Alice", "age": 25, "status": "Active"})
 
-class TestCalculateSquares(unittest.TestCase):
+    def test_missing_values(self):
+        # Testujeme, že funkcia správne zvláda chýbajúce hodnoty a nastaví predvolené hodnoty
+        self.assertEqual(process_user_data({"name": "", "age": None, "active": None}),
+                         {"name": "Unknown", "age": 18, "status": "Active"})
 
-    def test_calculate_squares(self):
-        # Testujeme, že funkcia vracia správne výsledky pre známe vstupy
-        self.assertEqual(calculate_squares(10), [0, 1, 4, 9, 16, 25, 36, 49, 64, 81])
+    def test_partial_data(self):
+        # Testujeme, že funkcia správne zvláda čiastočné dáta
+        self.assertEqual(process_user_data({"name": "Bob"}),
+                         {"name": "Bob", "age": 18, "status": "Active"})
 
-    def test_calculate_squares_empty(self):
-        # Testujeme, že funkcia vracia prázdny zoznam, keď je vstup nula
-        self.assertEqual(calculate_squares(0), [])
+    def test_inactive_status(self):
+        # Testujeme, že funkcia správne nastaví status na "Inactive" ak active je False
+        self.assertEqual(process_user_data({"name": "Charlie", "age": 30, "active": False}),
+                         {"name": "Charlie", "age": 30, "status": "Inactive"})
 
-
-
-# Tento kód umožňuje spustiť testy, keď súbor spustíte priamo
 if __name__ == '__main__':
     unittest.main()
